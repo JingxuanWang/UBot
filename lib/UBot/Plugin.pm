@@ -19,7 +19,7 @@ sub get_pattern {
     die "Please implement this function";
 }
 
-sub process_content {
+sub get_reply {
     die "Please implement this funciton";
 }
 

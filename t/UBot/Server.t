@@ -41,7 +41,9 @@ sub test_invalid_plugin_init {
     ok(defined $@);
 }
 
+
 test_valid_plugin_init();
 test_invalid_plugin_init();
+test_abstract_methods();
 
 done_testing();
