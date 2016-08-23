@@ -13,12 +13,14 @@ sub new {
         plugins => +{}
     };
 
-    no strict 'refs';
-    for my $plugin_name (keys %{ $self->{config}->{plugins} }) {
-        my $class = $self->{config}->{plugins}->{$plugin_name};
-        $self->{plugins}->{$plugin_name} = $class->new();
+    if (defined $self->{config}->{plugins}) {
+        no strict 'refs';
+        for my $plugin_name (keys %{ $self->{config}->{plugins} }) {
+            my $class = $self->{config}->{plugins}->{$plugin_name};
+            $self->{plugins}->{$plugin_name} = $class->new();
+        }
+        use strict 'refs';
     }
-    use strict 'refs';
 
     bless $self, $class;
 

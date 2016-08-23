@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# update coverage data
+cover -delete
+find . -iname \*.t | xargs -I {} perl -MDevel::Cover=-select,UBot,-ignore,.* -MUBotTest {}
+cover
+
+# reconstruct link
+rm -rf ../public/cover_db
+cp -r cover_db ../public/cover_db
