@@ -8,6 +8,7 @@ use Test::More;
 use Test::MockModule;
 use Test::MockObject;
 
+use UBot::Const;
 use UBot::Server;
 use UBot::Plugin::Date;
 use UBot::Plugin::Counter;
@@ -49,7 +50,7 @@ sub test_invalid_patterns {
 sub test_get_reply() {
     my $reply_params = $plugin->get_reply($PARAMS);
 
-    ok($reply_params->{method} eq "say");
+    ok($reply_params->{method} eq UBot::Const::CMD_SAY);
     ok($reply_params->{channel} eq $PARAMS->{channel});
     ok($reply_params->{body} =~ /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/);
 }

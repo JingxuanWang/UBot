@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use base qw/UBot::Plugin/;
+use UBot::Const;
 
 my $PATTERN = '^(\S*)(\+\+|\-\-)$';
 
@@ -29,7 +30,7 @@ sub get_reply {
         }
 
         $reply_params->{body} = "$var : $self->{data}->{$var}";
-        $reply_params->{method} = "say";
+        $reply_params->{method} = UBot::Const::CMD_SAY;
     }
 
     return $reply_params;

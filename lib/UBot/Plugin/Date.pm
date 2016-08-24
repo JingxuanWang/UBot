@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UBot::Util;
+use UBot::Const;
 
 use base qw/UBot::Plugin/;
 
@@ -25,7 +26,7 @@ sub get_reply {
     };
 
     $reply_params->{body} = UBot::Util::exec_cmd($CMD);
-    $reply_params->{method} = "say";
+    $reply_params->{method} = UBot::Const::CMD_SAY;
 
     return $reply_params;
 }

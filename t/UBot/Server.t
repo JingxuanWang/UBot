@@ -8,6 +8,7 @@ use Test::More;
 use Test::MockModule;
 use Test::MockObject;
 
+use UBot::Const;
 use UBot::Server;
 use UBot::Plugin::Date;
 use UBot::Plugin::Counter;
@@ -57,12 +58,12 @@ sub test_get_reply {
     my $server = UBot::Server->new($VALID_CONFIG);
     my $reply_param = $server->get_reply($params);
 
-    ok($reply_param->{method} eq "no_op");
+    ok($reply_param->{method} eq UBot::Const::CMD_NO_OP);
 
     $params->{body} = "date";
     $reply_param = $server->get_reply($params);
 
-    ok($reply_param->{method} eq "say");
+    ok($reply_param->{method} eq UBot::Const::CMD_SAY);
 }
 
 test_valid_plugin_init();

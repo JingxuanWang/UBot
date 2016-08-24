@@ -8,6 +8,7 @@ use Test::More;
 use Test::MockModule;
 use Test::MockObject;
 
+use UBot::Const;
 use UBot::Server;
 use UBot::Plugin::Date;
 use UBot::Plugin::Counter;
@@ -22,6 +23,12 @@ my @INVALID_PATTERNS = qw/
 my $PARAMS = +{
     channel => "test_channel",
     body => "wiki olympics",
+    who => "test_user",
+};
+
+my $NO_RESULT_PARAMS = +{
+    channel => "test_channel",
+    body => "wiki ++",
     who => "test_user",
 };
 
@@ -46,13 +53,22 @@ sub test_invalid_patterns {
 sub test_get_reply() {
     my $reply_params = $plugin->get_reply($PARAMS);
 
-    ok($reply_params->{method} eq "say");
-    ok($reply_params->{channel} eq $PARAMS->{channel});
-    ok($reply_params->{body} =~ /^http/);
+    ok($reply_params->{method} eq UBot::Const::CMD_SAY, "verify method: $reply_params->{method}");
+    ok($reply_params->{channel} eq $PARAMS->{channel}, "verify channel: $reply_params->{channel}");
+    ok($reply_params->{body} =~ /^http/, "verify body: $reply_params->{body}");
+}
+
+sub test_get_reply_but_no_result {
+    my $reply_params = $plugin->get_reply($NO_RESULT_PARAMS);
+
+    ok($reply_params->{method} eq UBot::Const::CMD_NO_OP, "verify method: $reply_params->{method}");
+    ok($reply_params->{channel} eq $PARAMS->{channel}, "verify channel: $reply_params->{channel}");
+    ok(!$reply_params->{body});
 }
 
 test_valid_patterns();
 test_invalid_patterns();
 test_get_reply();
+test_get_reply_but_no_result();
 
 done_testing();

@@ -1,3 +1,3 @@
 ## TODO
 
-* Add tests
+* Add persistent storage

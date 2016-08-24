@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use UBot::Util;
+use UBot::Const;
 use JSON;
 
 use base qw/UBot::Plugin/;
@@ -27,7 +28,12 @@ sub get_reply {
         my $keyword = $1;
         my $result = UBot::Util::exec_cmd("curl '$URL$keyword'");
         $reply_params->{body} = $self->parse_result($result);
-        $reply_params->{method} = "say";
+
+        if ($reply_params->{body}) {
+            $reply_params->{method} = UBot::Const::CMD_SAY;
+        } else {
+            $reply_params->{method} = UBot::Const::CMD_NO_OP;
+        }
     }
 
 
@@ -41,7 +47,9 @@ sub parse_result {
     my $result_in_perl = from_json($result);
 
     for my $element (@$result_in_perl) {
-        if (ref $element eq "ARRAY" && $element->[0] =~ /^http/) {
+        if (ref $element eq "ARRAY"
+            && defined $element->[0]
+            && $element->[0] =~ /^http/) {
             return $element->[0];
         }
     }
