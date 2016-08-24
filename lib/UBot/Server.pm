@@ -39,7 +39,7 @@ sub get_reply {
     }
 
     my $reply_param = +{
-        method => "say",
+        method => "no_op",
         channel => $params->{channel},
     };
 

@@ -2,7 +2,7 @@
 
 # update coverage data
 cover -delete
-find . -iname \*.t | xargs -I {} perl -MDevel::Cover=-select,UBot,-ignore,.* -MUBotTest {}
+find . -iname \*.t | xargs -I {} perl -I../lib -MDevel::Cover=-select,UBot,-ignore,.* {}
 cover
 
 # reconstruct link

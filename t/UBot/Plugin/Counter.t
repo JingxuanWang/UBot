@@ -8,14 +8,20 @@ use Test::More;
 use Test::MockModule;
 use Test::MockObject;
 
+use UBot::Server;
+use UBot::Plugin::Date;
+use UBot::Plugin::Counter;
+use UBot::Plugin::Wiki;
+
+
 my @VALID_PATTERNS = qw/
-        "abc++"
-        "def--"
+        abc++
+        def--
     /;
 
 my @INVALID_PATTERNS = qw/
-        "++abc"
-        "--def"
+        ++abc
+        --def
     /;
 
 my $PARAMS = +{
@@ -47,7 +53,7 @@ sub test_get_reply() {
 
     ok($reply_params->{method} eq "say");
     ok($reply_params->{channel} eq $PARAMS->{channel});
-    ok($reply_params->{body} =~ /(\S+) : (\d+)/);
+    ok($reply_params->{body} =~ /(\S+) : \-*(\d+)/);
 
     $PARAMS->{body} = "abc++";
 
@@ -55,7 +61,7 @@ sub test_get_reply() {
 
     ok($reply_params->{method} eq "say");
     ok($reply_params->{channel} eq $PARAMS->{channel});
-    ok($reply_params->{body} =~ /(\S+) : (\d+)/);
+    ok($reply_params->{body} =~ /(\S+) : \-*(\d+)/);
 }
 
 test_valid_patterns();

@@ -8,6 +8,11 @@ use Test::More;
 use Test::MockModule;
 use Test::MockObject;
 
+use UBot::Server;
+use UBot::Plugin::Date;
+use UBot::Plugin::Counter;
+use UBot::Plugin::Wiki;
+
 sub test_abstact_methods {
     my $plugin = UBot::Plugin->new();
     eval {
