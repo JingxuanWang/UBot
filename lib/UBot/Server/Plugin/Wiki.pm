@@ -1,43 +1,39 @@
-package UBot::Plugin::Wiki;
+package UBot::Server::Plugin::Wiki;
 
-use strict;
-use warnings FATAL => 'all';
+use base 'Mojolicious::Controller';
 
 use UBot::Util;
 use UBot::Const;
 use JSON;
 
-use base qw/UBot::Plugin/;
-
 my $PATTERN = '^wiki (.*)$';
 my $URL = "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&format=json&search=";
 
-sub get_pattern {
-    return $PATTERN;
-}
 
 sub get_reply {
     my $self = shift;
-    my $params = shift;
+
+    my $body = $self->param('body');
+    my $channel = $self->param('channel');
 
     my $reply_params = {
-        channel => $params->{channel},
+        channel => $channel,
     };
 
-    if ($params->{body} =~ /$PATTERN/) {
+    if ($body =~ /$PATTERN/) {
         my $keyword = $1;
         my $result = UBot::Util::exec_cmd("curl '$URL$keyword'");
+        #print STDERR $result;
         $reply_params->{body} = $self->parse_result($result);
 
         if ($reply_params->{body}) {
-            $reply_params->{method} = UBot::Const::CMD_SAY;
+            $reply_params->{method} = UBot::Const::COMMAND_SAY;
         } else {
-            $reply_params->{method} = UBot::Const::CMD_NO_OP;
+            $reply_params->{method} = UBot::Const::COMMAND_NO_OP;
         }
     }
 
-
-    return $reply_params;
+    $self->render(json => $reply_params);
 }
 
 sub parse_result {

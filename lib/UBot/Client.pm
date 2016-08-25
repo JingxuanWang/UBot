@@ -15,5 +15,8 @@ sub new {
     return $self;
 }
 
+sub query_server {
+
+}
 
 1;

@@ -9,7 +9,7 @@ use Test::MockModule;
 use Test::MockObject;
 
 use JSON;
-use UBot::Storage::Redis;
+use UBot::Server::Storage::Redis;
 
 my $VALID_CONFIG = +{
     server => "127.0.0.1:6379"
@@ -22,7 +22,7 @@ my $KEY_VALUE_MAP = +{
 };
 
 sub test_get_and_set {
-    my $redis = UBot::Storage::Redis->new($VALID_CONFIG);
+    my $redis = UBot::Server::Storage::Redis->new($VALID_CONFIG);
 
     for my $key (keys %{$KEY_VALUE_MAP}) {
         my $value = $KEY_VALUE_MAP->{$key};

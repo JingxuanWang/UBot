@@ -1,4 +1,4 @@
-package UBot::Storage::Redis;
+package UBot::Server::Storage::Redis;
 
 use strict;
 use warnings FATAL => 'all';

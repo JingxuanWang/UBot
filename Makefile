@@ -4,5 +4,5 @@ test:
 	prove -I lib -r t
 coverage:
 	cd t && ./coverage_test
-dev:
-	cd script && perl app.pl
+server-dev:
+	cd script && ./ubot-server daemon -m development
