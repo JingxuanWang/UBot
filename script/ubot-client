@@ -1,0 +1,14 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use lib "../lib";
+
+use UBot::Client;
+use UBot::Config;
+
+my $config = UBot::Config::get_conf($ARGV[0]);
+my $client = UBot::Client->new($config);
+
+$client->start();

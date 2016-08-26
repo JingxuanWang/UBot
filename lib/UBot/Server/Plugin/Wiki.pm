@@ -14,16 +14,13 @@ sub get_reply {
     my $self = shift;
 
     my $body = $self->param('body');
-    my $channel = $self->param('channel');
 
-    my $reply_params = {
-        channel => $channel,
-    };
+    my $reply_params = +{ };
 
     if ($body =~ /$PATTERN/) {
         my $keyword = $1;
         my $result = UBot::Util::exec_cmd("curl '$URL$keyword'");
-        #print STDERR $result;
+
         $reply_params->{body} = $self->parse_result($result);
 
         if ($reply_params->{body}) {
@@ -31,6 +28,8 @@ sub get_reply {
         } else {
             $reply_params->{method} = UBot::Const::COMMAND_NO_OP;
         }
+    } else {
+        die "$body not hit $PATTERN";
     }
 
     $self->render(json => $reply_params);

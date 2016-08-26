@@ -2,6 +2,7 @@ package UBot::Server::Controller::Dispatcher;
 
 use base 'Mojolicious::Controller';
 use UBot::Const;
+use Data::Dumper;
 
 sub dispatch {
     my $self = shift;
@@ -11,9 +12,12 @@ sub dispatch {
     my $dispatch_rules = $self->app->config->{dispatch_rules};
 
     for my $rule (%{$dispatch_rules}) {
-        my $target_url = $dispatch_rules->{$rule};
+        my $route_name = $dispatch_rules->{$rule};
+        my $target_url = $self->url_for($route_name);
         if ($body =~ /$rule/) {
-            $self->redirect_to($target_url);
+            $self->app->log->debug("dispatcher: redirect to $route_name");
+            $self->redirect_to( $target_url->query(body => $body) );
+            return;
         }
     }
 

@@ -12,19 +12,18 @@ sub get_reply {
     my $self = shift;
 
     my $body = $self->param('body');
-    my $channel = $self->param('channel');
 
-    my $reply_params = {
-        channel => $channel
-    };
+    my $reply_params = +{ };
 
     if ($body =~ /$PATTERN/) {
         my $key = $1;
         my $op = $2;
         my $value = $self->update_data($key, $op);
 
-        $reply_params->{content} = "$key : $value";
+        $reply_params->{body} = "$key : $value";
         $reply_params->{method} = UBot::Const::COMMAND_SAY;
+    } else {
+        die "$body not hit $PATTERN";
     }
 
     $self->render(json => $reply_params);
