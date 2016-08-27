@@ -6,16 +6,12 @@ use warnings FATAL => 'all';
 use base qw/Bot::BasicBot/;
 
 use UBot::Const;
-use Mojo::UserAgent;
-use JSON;
 
-
-sub init {
+sub set_ubot_reference {
     my $self = shift;
     my $ubot = shift;
 
     $self->{ubot} = $ubot;
-    return 1;
 }
 
 # hook method

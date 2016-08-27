@@ -1,23 +1,26 @@
-package UBot::Server::Plugin::Wiki;
+package UBot::Server::Plugin::StackOverflow;
 
 use base 'Mojolicious::Controller';
 
 use Mojo::UserAgent;
+use UBot::Util;
 use UBot::Const;
 use JSON;
 
-my $ACTION = "opensearch";
-my $LIMIT = 1;
-my $NAMESPACE = 0;
-my $FORMAT = "json";
+my $PAGE = 1;
+my $PAGE_SIZE = 1;
+my $ORDER = "desc";
+my $SORT = "relevance";
+my $SITE = "stackoverflow";
 
-my $PATTERN = '^wiki (.*)$';
-my $URL = "https://en.wikipedia.org/w/api.php?"
-        ."action=$ACTION"
-        ."&limit=$LIMIT"
-        ."&namespace=$NAMESPACE"
-        ."&format=$FORMAT"
-        ."&search=";
+my $PATTERN = '^stackoverflow (.*)$';
+my $URL = "https://api.stackexchange.com/2.2/search?"
+        ."page=$PAGE"
+        ."&pagesize=$PAGE_SIZE"
+        ."&order=$ORDER"
+        ."&sort=$SORT"
+        ."&site=$SITE"
+        ."&intitle=";
 
 
 sub get_reply {
@@ -54,12 +57,8 @@ sub parse_result {
 
     my $result_in_perl = from_json($result);
 
-    for my $element (@$result_in_perl) {
-        if (ref $element eq "ARRAY"
-            && defined $element->[0]
-            && $element->[0] =~ /^http/) {
-            return $element->[0];
-        }
+    if (defined $result_in_perl->{items}->[0]) {
+        return $result_in_perl->{items}->[0]->{link};
     }
 }
 

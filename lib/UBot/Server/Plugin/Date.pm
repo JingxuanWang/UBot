@@ -4,7 +4,6 @@ use base 'Mojolicious::Controller';
 
 use UBot::Util;
 use UBot::Const;
-use Data::Dumper;
 
 my $CMD = 'date "+%Y-%m-%d %H:%M:%S"';
 
