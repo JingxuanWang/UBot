@@ -1,3 +1,4 @@
 ## TODO
 
-* Customize Redis config
+* Stackoverflow search plugin
+* local IRC server setup

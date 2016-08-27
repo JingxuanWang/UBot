@@ -1,8 +1,10 @@
 init:
 	cd script && ./install_deps
 test:
-	prove -I lib -r t
+	cd t && prove -I ../lib -r .
 coverage:
 	cd t && ./coverage_test
-dev:
-	cd script && perl app.pl
+client-irc-dev:
+	cd script && ./ubot-client ../conf/development/client-irc.conf
+server-dev:
+	cd script && ./ubot-server daemon -m development
