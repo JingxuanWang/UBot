@@ -72,14 +72,16 @@ sub received_from_client {
     # TODO: parameter transformation before query server
 
     my $tx = $self->post_to_server($self->{config}->{server_url}, $params);
+    my $reply_params = +{};
 
     eval {
-        my $reply_params = from_json($tx->res->body);
+        $self->{logger}->debug("Server return: ", $tx->res->body);
+        $reply_params = from_json($tx->res->body);
         $reply_params->{channel} = $params->{channel};
         $self->process_server_reply( $reply_params );
     };
     if ($@) {
-        $self->{logger}->error("Client ignore server reply: $@");
+        $self->{logger}->error( "Client ignore server reply: $@" );
     }
 }
 

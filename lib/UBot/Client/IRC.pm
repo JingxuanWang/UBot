@@ -24,6 +24,8 @@ sub said {
 
     $params->{method} = UBot::Const::COMMAND_SAID;
     $self->{ubot}->received_from_client( $params );
+
+    return;
 }
 
 
