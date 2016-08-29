@@ -3,7 +3,6 @@ package UBot::Server::Plugin::StackOverflow;
 use base 'Mojolicious::Controller';
 
 use Mojo::UserAgent;
-use UBot::Util;
 use UBot::Const;
 use JSON;
 
