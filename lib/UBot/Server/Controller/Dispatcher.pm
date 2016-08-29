@@ -15,7 +15,7 @@ sub dispatch {
         my $route_name = $dispatch_rules->{$rule};
         my $target_url = $self->url_for($route_name);
         if ($body =~ /$rule/) {
-            $self->app->log->debug("dispatcher: redirect to $route_name");
+            $self->app->log->debug("dispatcher: redirect to $route_name, body: $body");
             $self->redirect_to( $target_url->query(body => $body) );
             return;
         }
