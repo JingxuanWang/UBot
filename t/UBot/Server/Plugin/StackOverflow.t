@@ -20,8 +20,8 @@ sub test_get_reply() {
     $t->get_ok("/query?body=$body")->status_is(302);
     $t->get_ok("/plugin/stackoverflow?body=$body")
         ->status_is(200)
-        ->json_has('method' => UBot::Const::COMMAND_SAY)
-        ->json_has('body' => qr/^http/);
+        ->json_is('/method' => UBot::Const::COMMAND_SAY)
+        ->json_like('/body' => qr/^http/);
 }
 
 test_get_reply();

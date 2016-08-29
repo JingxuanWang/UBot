@@ -19,12 +19,23 @@ sub test_get_reply() {
     $t->post_ok("/query" => form => {
             body => $body
         })->status_is(302);
+
     $t->post_ok('/plugin/counter' => form => {
             body => $body
         })
         ->status_is(200)
-        ->json_has('method' => UBot::Const::COMMAND_SAY)
-        ->json_has('body' => qr/(\S+) : \-*(\d+)/);
+        ->json_is('/method' => UBot::Const::COMMAND_SAY)
+        ->json_like('/body' => qr/(\S+) : \-*(\d+)/);
+
+    $body = "abc--";
+
+    $t->post_ok('/plugin/counter' => form => {
+            body => $body
+        })
+        ->status_is(200)
+        ->json_is('/method' => UBot::Const::COMMAND_SAY)
+        ->json_like('/body' => qr/(\S+) : \-*(\d+)/);
+
 }
 
 test_get_reply();

@@ -36,9 +36,4 @@ sub get_reply {
     $self->render(json => $reply_params);
 }
 
-sub to_stamp {
-    my ($year, $month, $day, $hour, $minute, $second) = @_;
-    return mktime($second, $minute, $hour, $day, $month - 1, $year - 1900);
-}
-
 1;
