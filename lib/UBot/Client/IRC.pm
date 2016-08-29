@@ -25,6 +25,7 @@ sub said {
     $params->{method} = UBot::Const::COMMAND_SAID;
     $self->{ubot}->received_from_client( $params );
 
+    # don't use default callback from Bot::BasicBot
     return;
 }
 

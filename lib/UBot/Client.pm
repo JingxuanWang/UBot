@@ -29,6 +29,29 @@ sub new {
         $self->{logger} = UBot::Log->new($config->{log});
     }
 
+    # initialize plugins
+    if (defined $config->{plugin}) {
+        eval {
+            for my $plugin_pattern (keys %{$config->{plugin}}) {
+                my $plugin_class = $config->{plugin}->{$plugin_pattern};
+
+                my $plugin_path = $plugin_class;
+                $plugin_path =~ s#::#/#g;
+                $plugin_path .= ".pm";
+                require $plugin_path;
+
+                if (!$plugin_class->can('get_reply')) {
+                    die "Plugin should contain at least a get_reply function";
+                }
+
+                $self->{plugin}->{$plugin_pattern} = $plugin_class;
+            }
+        };
+        if ($@) {
+           $self->{logger}->error("Client initialize plugin failed: $@");
+        }
+    }
+
     # check if client exists
     if (!defined $self->{client} ) {
         die "Client undefined";
@@ -39,7 +62,8 @@ sub new {
         die "Logger undefined";
     }
 
-    # chekc if server url exists
+    # TODO: once client can has its own plugin,
+    # server_url will not be a must
     if (!defined $self->{config}->{server_url}) {
         die "Undefined server url";
     }
@@ -71,6 +95,20 @@ sub received_from_client {
 
     # TODO: parameter transformation before query server
 
+    # Check client plugins
+    for my $plugin_pattern (keys %{$self->{plugin}}) {
+        if ($plugin_pattern =~ /$params->{body}/) {
+            my $plugin_class = $self->{plugin}->{$plugin_pattern};
+            my $reply_params = $plugin_class->get_reply($params);
+            $reply_params->{channel} = $params->{channel};
+            $self->process_server_reply($reply_params);
+            return;
+        }
+    }
+
+    # if not hit, then try to query server
+    $self->{logger}->debug("Client not hit, querying Server");
+
     my $tx = $self->post_to_server($self->{config}->{server_url}, $params);
     my $reply_params = +{};
 
@@ -78,7 +116,7 @@ sub received_from_client {
         $self->{logger}->debug("Server return: ", $tx->res->body);
         $reply_params = from_json($tx->res->body);
         $reply_params->{channel} = $params->{channel};
-        $self->process_server_reply( $reply_params );
+        $self->process_server_reply($reply_params);
     };
     if ($@) {
         $self->{logger}->error( "Client ignore server reply: $@" );
